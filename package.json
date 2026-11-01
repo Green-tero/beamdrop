@@ -1,0 +1,25 @@
+{
+  "name": "beamdrop",
+  "version": "1.0.0",
+  "description": "Peer-to-peer local network file and text sharing over WebRTC",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "start": "npm run start --workspace=server"
+  },
+  "keywords": [
+    "webrtc",
+    "p2p",
+    "file-sharing",
+    "websocket",
+    "signaling",
+    "peer-to-peer"
+  ],
+  "author": "Green-tero",
+  "license": "MIT"
+}
