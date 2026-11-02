@@ -1,6 +1,6 @@
 {
   "name": "beamdrop",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Peer-to-peer local network file and text sharing over WebRTC",
   "private": true,
   "workspaces": [
