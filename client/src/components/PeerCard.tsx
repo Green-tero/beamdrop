@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Monitor, Smartphone, Tablet, Laptop, Send, MessageSquare, HardDriveDownload } from 'lucide-react';
 import type { Peer } from '../types';
+import { useI18n } from '../i18n';
 
 interface PeerCardProps {
   peer: Peer;
@@ -9,6 +10,7 @@ interface PeerCardProps {
 }
 
 export const PeerCard: React.FC<PeerCardProps> = ({ peer, onSendFile, onRequestTextSend }) => {
+  const { t } = useI18n();
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -85,7 +87,7 @@ export const PeerCard: React.FC<PeerCardProps> = ({ peer, onSendFile, onRequestT
         <h3 className="font-semibold text-slate-100 text-base tracking-wide truncate max-w-full">
           {peer.name}
         </h3>
-        <p className="text-xs text-slate-400 mt-0.5 truncate">
+        <p className="text-xs text-slate-400 mt-0.5 truncate dir-ltr">
           {peer.device.os} · {peer.device.browser}
         </p>
       </div>
@@ -94,17 +96,17 @@ export const PeerCard: React.FC<PeerCardProps> = ({ peer, onSendFile, onRequestT
         <button
           onClick={() => fileInputRef.current?.click()}
           className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 text-cyan-300 text-xs font-medium transition-colors"
-          title="Send file"
+          title={t.sendFile}
         >
           <Send className="h-3.5 w-3.5" />
-          <span>Send File</span>
+          <span>{t.sendFile}</span>
         </button>
 
         <button
           onClick={() => onRequestTextSend(peer)}
           className="flex items-center justify-center p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-colors"
-          title="Send text message"
-          aria-label="Send text"
+          title={t.sendText}
+          aria-label={t.sendText}
         >
           <MessageSquare className="h-4 w-4" />
         </button>
@@ -113,7 +115,7 @@ export const PeerCard: React.FC<PeerCardProps> = ({ peer, onSendFile, onRequestT
       {isDragOver && (
         <div className="absolute inset-0 rounded-2xl bg-cyan-950/80 border-2 border-dashed border-cyan-400 flex flex-col items-center justify-center text-cyan-200 z-10 animate-fade-in pointer-events-none">
           <HardDriveDownload className="h-8 w-8 mb-2 animate-bounce" />
-          <span className="text-xs font-semibold">Drop file to send</span>
+          <span className="text-xs font-semibold">{t.dropToSend}</span>
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowUpRight, ArrowDownLeft, FileText, CheckCircle2, AlertCircle, XCircle, X } from 'lucide-react';
 import type { FileTransferProgress } from '../types';
 import { formatBytes, formatSpeed } from '../utils/chunker';
+import { useI18n } from '../i18n';
 
 interface FileTransferModalProps {
   transfer: FileTransferProgress | null;
@@ -14,6 +15,8 @@ export const FileTransferModal: React.FC<FileTransferModalProps> = ({
   onCancel,
   onDismiss
 }) => {
+  const { t } = useI18n();
+
   if (!transfer) return null;
 
   const isSending = transfer.direction === 'send';
@@ -48,10 +51,10 @@ export const FileTransferModal: React.FC<FileTransferModalProps> = ({
             </div>
             <div>
               <h3 className="font-semibold text-white text-base">
-                {isSending ? 'Sending file' : 'Receiving file'}
+                {isSending ? t.sendingFile : t.receivingFile}
               </h3>
               <p className="text-xs text-slate-400">
-                {isSending ? `To ${transfer.peerName}` : `From ${transfer.peerName}`}
+                {isSending ? t.toPeer(transfer.peerName) : t.fromPeer(transfer.peerName)}
               </p>
             </div>
           </div>
@@ -72,11 +75,11 @@ export const FileTransferModal: React.FC<FileTransferModalProps> = ({
             <FileText className="h-6 w-6" />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="font-medium text-slate-200 text-sm truncate" title={transfer.fileName}>
+            <div className="font-medium text-slate-200 text-sm truncate dir-ltr text-left" title={transfer.fileName}>
               {transfer.fileName}
             </div>
-            <div className="text-xs text-slate-400 mt-0.5">
-              {formatBytes(transfer.bytesTransferred)} of {formatBytes(transfer.fileSize)}
+            <div className="text-xs text-slate-400 mt-0.5 dir-ltr text-left">
+              {formatBytes(transfer.bytesTransferred)} / {formatBytes(transfer.fileSize)}
             </div>
           </div>
         </div>
@@ -88,27 +91,27 @@ export const FileTransferModal: React.FC<FileTransferModalProps> = ({
               {transfer.status === 'transferring' && (
                 <>
                   <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-ping" />
-                  <span>Transferring at {formatSpeed(transfer.speed)}</span>
+                  <span>{t.transferringAt} {formatSpeed(transfer.speed)}</span>
                 </>
               )}
-              {transfer.status === 'pending' && 'Connecting to peer...'}
+              {transfer.status === 'pending' && t.connectingToPeer}
               {transfer.status === 'completed' && (
                 <span className="text-emerald-400 flex items-center gap-1">
-                  <CheckCircle2 className="h-3.5 w-3.5" /> Transfer complete
+                  <CheckCircle2 className="h-3.5 w-3.5" /> {t.transferComplete}
                 </span>
               )}
               {transfer.status === 'cancelled' && (
                 <span className="text-amber-400 flex items-center gap-1">
-                  <XCircle className="h-3.5 w-3.5" /> Transfer cancelled
+                  <XCircle className="h-3.5 w-3.5" /> {t.transferCancelled}
                 </span>
               )}
               {transfer.status === 'error' && (
                 <span className="text-rose-400 flex items-center gap-1">
-                  <AlertCircle className="h-3.5 w-3.5" /> {transfer.errorMessage || 'Transfer failed'}
+                  <AlertCircle className="h-3.5 w-3.5" /> {transfer.errorMessage || t.transferError}
                 </span>
               )}
             </span>
-            <span className="font-mono font-semibold text-slate-200 text-sm">
+            <span className="font-mono font-semibold text-slate-200 text-sm dir-ltr">
               {transfer.percentage}%
             </span>
           </div>
@@ -136,14 +139,14 @@ export const FileTransferModal: React.FC<FileTransferModalProps> = ({
               onClick={onCancel}
               className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition-colors"
             >
-              Cancel Transfer
+              {t.cancelTransfer}
             </button>
           ) : (
             <button
               onClick={onDismiss}
               className="w-full py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition-colors shadow-lg shadow-cyan-500/20"
             >
-              Done
+              {t.done}
             </button>
           )}
         </div>

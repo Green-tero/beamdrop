@@ -1,6 +1,7 @@
 import { useRef, useCallback, useState, useEffect } from 'react';
 import type { FileMetadata, FileTransferProgress, Peer, TextShareMessage } from '../types';
 import { CHUNK_SIZE, BUFFER_THRESHOLD, createFileMetadata, triggerDownload } from '../utils/chunker';
+import { playCompleteSound, playMessageSound } from '../utils/sound';
 
 interface SignalPayload {
   description?: RTCSessionDescriptionInit;
@@ -103,6 +104,7 @@ export function useWebRTC({ self, sendSignal, onTextReceived }: WebRTCOptions) {
               peerName: payload.senderName || 'Peer',
               timestamp: payload.timestamp || Date.now()
             };
+            playMessageSound();
             setIncomingText(textMsg);
             if (onTextReceived) onTextReceived(textMsg);
           } else if (payload.type === 'cancel-transfer') {
@@ -146,7 +148,9 @@ export function useWebRTC({ self, sendSignal, onTextReceived }: WebRTCOptions) {
 
         if (state.bytesReceived >= state.metadata.size) {
           triggerDownload(state.chunks, state.metadata);
-          setActiveTransfer((prev) => (prev ? { ...prev, percentage: 100, status: 'completed' } : null));
+          playCompleteSound();
+          playCompleteSound();
+      setActiveTransfer((prev) => (prev ? { ...prev, percentage: 100, status: 'completed' } : null));
           receivingFileRef.current = null;
         }
       }
@@ -351,6 +355,7 @@ export function useWebRTC({ self, sendSignal, onTextReceived }: WebRTCOptions) {
         );
       }
 
+      playCompleteSound();
       setActiveTransfer((prev) => (prev ? { ...prev, percentage: 100, status: 'completed' } : null));
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Transfer failed';

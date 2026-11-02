@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Edit2, Check, Monitor, Smartphone, Tablet, Laptop } from 'lucide-react';
 import type { Peer } from '../types';
+import { useI18n } from '../i18n';
 
 interface SelfBarProps {
   self: Peer | null;
@@ -8,6 +9,7 @@ interface SelfBarProps {
 }
 
 export const SelfBar: React.FC<SelfBarProps> = ({ self, onUpdateName }) => {
+  const { t } = useI18n();
   const [isEditing, setIsEditing] = useState(false);
   const [nameInput, setNameInput] = useState('');
 
@@ -55,7 +57,7 @@ export const SelfBar: React.FC<SelfBarProps> = ({ self, onUpdateName }) => {
           </div>
           <div>
             <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">
-              You are known as
+              {t.youAreKnownAs}
             </span>
 
             {isEditing ? (
@@ -82,7 +84,7 @@ export const SelfBar: React.FC<SelfBarProps> = ({ self, onUpdateName }) => {
                 <button
                   onClick={handleStartEdit}
                   className="text-slate-500 hover:text-slate-300 transition-colors p-0.5"
-                  title="Rename"
+                  title={t.rename}
                 >
                   <Edit2 className="h-3 w-3" />
                 </button>
@@ -91,11 +93,11 @@ export const SelfBar: React.FC<SelfBarProps> = ({ self, onUpdateName }) => {
           </div>
         </div>
 
-        <div className="text-right">
-          <span className="text-xs text-slate-400 block font-medium">
+        <div className="text-right sm:text-right">
+          <span className="text-xs text-slate-400 block font-medium dir-ltr">
             {self.device.os}
           </span>
-          <span className="text-[11px] text-slate-500">
+          <span className="text-[11px] text-slate-500 dir-ltr">
             {self.device.browser}
           </span>
         </div>

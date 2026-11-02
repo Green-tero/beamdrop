@@ -1,5 +1,6 @@
 import React from 'react';
-import { Github, Info, Zap } from 'lucide-react';
+import { Github, Info, Zap, Languages } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 interface NavbarProps {
   connected: boolean;
@@ -8,6 +9,8 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ connected, peerCount, onOpenAbout }) => {
+  const { lang, toggleLang, t } = useI18n();
+
   return (
     <header className="w-full max-w-6xl mx-auto px-4 py-4 flex items-center justify-between z-20 relative">
       <div className="flex items-center gap-3">
@@ -16,16 +19,17 @@ export const Navbar: React.FC<NavbarProps> = ({ connected, peerCount, onOpenAbou
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold tracking-tight text-white">BeamDrop</span>
+            <span className="text-xl font-bold tracking-tight text-white">{t.appTitle}</span>
             <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-              P2P
+              {t.p2pBadge}
             </span>
           </div>
-          <p className="text-xs text-slate-400 hidden sm:block">Instant peer-to-peer sharing</p>
+          <p className="text-xs text-slate-400 hidden sm:block">{t.tagline}</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5 sm:gap-3">
+        {/* Status pill */}
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800 backdrop-blur-md text-xs">
           <span className="relative flex h-2 w-2">
             {connected && (
@@ -38,25 +42,37 @@ export const Navbar: React.FC<NavbarProps> = ({ connected, peerCount, onOpenAbou
             ></span>
           </span>
           <span className="text-slate-300 font-medium">
-            {connected ? `${peerCount} ${peerCount === 1 ? 'peer' : 'peers'} online` : 'Connecting...'}
+            {connected ? t.peersOnline(peerCount) : t.connecting}
           </span>
         </div>
 
+        {/* Language switcher button */}
+        <button
+          onClick={toggleLang}
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-cyan-400 transition-colors"
+          title={lang === 'en' ? 'تغییر زبان به فارسی' : 'Switch to English'}
+        >
+          <Languages className="h-3.5 w-3.5 text-cyan-400" />
+          <span className="uppercase text-[11px] tracking-wider">{lang === 'en' ? 'FA' : 'EN'}</span>
+        </button>
+
+        {/* About button */}
         <button
           onClick={onOpenAbout}
           className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors"
-          title="About BeamDrop"
-          aria-label="About"
+          title={t.about}
+          aria-label={t.about}
         >
           <Info className="h-5 w-5" />
         </button>
 
+        {/* GitHub link */}
         <a
           href="https://github.com/Green-tero/beamdrop"
           target="_blank"
           rel="noopener noreferrer"
           className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors"
-          title="View GitHub Repository"
+          title={t.viewGithub}
           aria-label="GitHub"
         >
           <Github className="h-5 w-5" />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send, Copy, Check, X, MessageSquare } from 'lucide-react';
 import type { Peer, TextShareMessage } from '../types';
+import { useI18n } from '../i18n';
 
 interface SendTextModalProps {
   targetPeer: Peer | null;
@@ -9,6 +10,7 @@ interface SendTextModalProps {
 }
 
 export const SendTextModal: React.FC<SendTextModalProps> = ({ targetPeer, onSend, onClose }) => {
+  const { t } = useI18n();
   const [text, setText] = useState('');
 
   if (!targetPeer) return null;
@@ -30,8 +32,8 @@ export const SendTextModal: React.FC<SendTextModalProps> = ({ targetPeer, onSend
               <MessageSquare className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-semibold text-white text-base">Send Text Message</h3>
-              <p className="text-xs text-slate-400">To {targetPeer.name}</p>
+              <h3 className="font-semibold text-white text-base">{t.sendTextMessageTitle}</h3>
+              <p className="text-xs text-slate-400">{t.toPeer(targetPeer.name)}</p>
             </div>
           </div>
           <button
@@ -46,21 +48,21 @@ export const SendTextModal: React.FC<SendTextModalProps> = ({ targetPeer, onSend
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Type or paste any text, URL, code snippet..."
+            placeholder={t.textPlaceholder}
             rows={5}
             autoFocus
             className="w-full bg-slate-800/80 border border-slate-700/80 rounded-2xl p-3.5 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-400 focus:border-cyan-400 resize-none font-mono"
           />
 
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-500">{text.length} characters</span>
+            <span className="text-xs text-slate-500">{t.charCount(text.length)}</span>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={onClose}
                 className="py-2 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
               >
-                Cancel
+                {t.cancel}
               </button>
               <button
                 type="submit"
@@ -68,7 +70,7 @@ export const SendTextModal: React.FC<SendTextModalProps> = ({ targetPeer, onSend
                 className="flex items-center gap-1.5 py-2 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 disabled:opacity-50 disabled:pointer-events-none text-slate-950 text-xs font-bold transition-colors shadow-lg shadow-cyan-500/20"
               >
                 <Send className="h-3.5 w-3.5" />
-                <span>Send</span>
+                <span>{t.send}</span>
               </button>
             </div>
           </div>
@@ -84,6 +86,7 @@ interface ReceivedTextModalProps {
 }
 
 export const ReceivedTextModal: React.FC<ReceivedTextModalProps> = ({ message, onClose }) => {
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
 
   if (!message) return null;
@@ -94,7 +97,6 @@ export const ReceivedTextModal: React.FC<ReceivedTextModalProps> = ({ message, o
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback if clipboard API is restricted
       const textarea = document.createElement('textarea');
       textarea.value = message.text;
       document.body.appendChild(textarea);
@@ -115,8 +117,8 @@ export const ReceivedTextModal: React.FC<ReceivedTextModalProps> = ({ message, o
               <MessageSquare className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-semibold text-white text-base">Message Received</h3>
-              <p className="text-xs text-slate-400">From {message.peerName}</p>
+              <h3 className="font-semibold text-white text-base">{t.messageReceivedTitle}</h3>
+              <p className="text-xs text-slate-400">{t.fromPeer(message.peerName)}</p>
             </div>
           </div>
           <button
@@ -127,7 +129,7 @@ export const ReceivedTextModal: React.FC<ReceivedTextModalProps> = ({ message, o
           </button>
         </div>
 
-        <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 max-h-60 overflow-y-auto mb-5 font-mono text-xs text-slate-200 whitespace-pre-wrap break-words select-all">
+        <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 max-h-60 overflow-y-auto mb-5 font-mono text-xs text-slate-200 whitespace-pre-wrap break-words select-all dir-ltr text-left">
           {message.text}
         </div>
 
@@ -139,12 +141,12 @@ export const ReceivedTextModal: React.FC<ReceivedTextModalProps> = ({ message, o
             {copied ? (
               <>
                 <Check className="h-4 w-4" />
-                <span>Copied to Clipboard!</span>
+                <span>{t.copied}</span>
               </>
             ) : (
               <>
                 <Copy className="h-4 w-4" />
-                <span>Copy to Clipboard</span>
+                <span>{t.copyToClipboard}</span>
               </>
             )}
           </button>
@@ -152,7 +154,7 @@ export const ReceivedTextModal: React.FC<ReceivedTextModalProps> = ({ message, o
             onClick={onClose}
             className="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
           >
-            Close
+            {t.close}
           </button>
         </div>
       </div>

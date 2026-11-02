@@ -2,6 +2,7 @@ import React from 'react';
 import { Wifi, Radio, Laptop } from 'lucide-react';
 import type { Peer } from '../types';
 import { PeerCard } from './PeerCard';
+import { useI18n } from '../i18n';
 
 interface PeerRadarProps {
   peers: Peer[];
@@ -10,6 +11,8 @@ interface PeerRadarProps {
 }
 
 export const PeerRadar: React.FC<PeerRadarProps> = ({ peers, onSendFile, onRequestTextSend }) => {
+  const { t } = useI18n();
+
   return (
     <div className="flex-1 w-full flex flex-col items-center justify-center p-6 relative min-h-[460px]">
       {/* Background ambient radar glow rings */}
@@ -30,20 +33,20 @@ export const PeerRadar: React.FC<PeerRadarProps> = ({ peers, onSendFile, onReque
           </div>
 
           <h2 className="text-xl font-bold text-slate-100 tracking-tight">
-            Scanning for nearby peers...
+            {t.scanningTitle}
           </h2>
           <p className="text-sm text-slate-400 mt-2 leading-relaxed">
-            Open <span className="text-cyan-400 font-medium">BeamDrop</span> on another phone, tablet, or laptop on the same network to share files instantly.
+            {t.scanningDesc}
           </p>
 
           <div className="mt-8 flex items-center gap-6 text-xs text-slate-500">
             <div className="flex items-center gap-1.5">
               <Wifi className="h-3.5 w-3.5 text-slate-400" />
-              <span>Same Wi-Fi network</span>
+              <span>{t.sameWifi}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Laptop className="h-3.5 w-3.5 text-slate-400" />
-              <span>No app install needed</span>
+              <span>{t.noInstall}</span>
             </div>
           </div>
         </div>
@@ -51,7 +54,7 @@ export const PeerRadar: React.FC<PeerRadarProps> = ({ peers, onSendFile, onReque
         <div className="relative z-10 w-full max-w-5xl flex flex-col items-center">
           <div className="mb-6 text-center">
             <span className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
-              Discovered Devices ({peers.length})
+              {t.discoveredDevices(peers.length)}
             </span>
           </div>
 

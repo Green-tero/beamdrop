@@ -7,9 +7,11 @@ import { SendTextModal, ReceivedTextModal } from './components/TextShareModal';
 import { AboutModal } from './components/AboutModal';
 import { useSignaling } from './hooks/useSignaling';
 import { useWebRTC } from './hooks/useWebRTC';
+import { useI18n } from './i18n';
 import type { Peer } from './types';
 
 export const App: React.FC = () => {
+  const { t } = useI18n();
   const [targetTextPeer, setTargetTextPeer] = useState<Peer | null>(null);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isGlobalDragging, setIsGlobalDragging] = useState(false);
@@ -40,7 +42,6 @@ export const App: React.FC = () => {
   };
 
   const handleGlobalDragLeave = (e: React.DragEvent) => {
-    // Only dismiss when leaving window bounds
     if (e.clientX <= 0 || e.clientY <= 0 || e.clientX >= window.innerWidth || e.clientY >= window.innerHeight) {
       setIsGlobalDragging(false);
     }
@@ -50,7 +51,6 @@ export const App: React.FC = () => {
     e.preventDefault();
     setIsGlobalDragging(false);
 
-    // If exactly one peer is available and user drops anywhere on the page, send to them
     if (peers.length === 1 && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       sendFile(peers[0], e.dataTransfer.files[0]);
     }
@@ -83,11 +83,11 @@ export const App: React.FC = () => {
       {isGlobalDragging && peers.length > 0 && (
         <div className="fixed inset-0 z-40 bg-black/70 backdrop-blur-md border-4 border-dashed border-cyan-500 flex flex-col items-center justify-center pointer-events-none animate-fade-in">
           <div className="text-center p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl">
-            <h3 className="text-xl font-bold text-white mb-2">Drop file to share</h3>
+            <h3 className="text-xl font-bold text-white mb-2">{t.globalDropTitle}</h3>
             <p className="text-sm text-cyan-400">
               {peers.length === 1
-                ? `Will send immediately to ${peers[0].name}`
-                : 'Drop on a specific device card to choose recipient'}
+                ? t.globalDropSingle(peers[0].name)
+                : t.globalDropMulti}
             </p>
           </div>
         </div>

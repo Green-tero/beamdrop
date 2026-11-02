@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, ShieldCheck, Zap, Lock, Network } from 'lucide-react';
+import { useI18n } from '../i18n';
 
 interface AboutModalProps {
   isOpen: boolean;
@@ -7,6 +8,8 @@ interface AboutModalProps {
 }
 
 export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
+  const { t } = useI18n();
+
   if (!isOpen) return null;
 
   return (
@@ -18,8 +21,8 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
               <Zap className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-semibold text-white text-base">About BeamDrop</h3>
-              <p className="text-xs text-slate-400">Under the hood</p>
+              <h3 className="font-semibold text-white text-base">{t.aboutTitle}</h3>
+              <p className="text-xs text-slate-400">{t.aboutSubtitle}</p>
             </div>
           </div>
           <button
@@ -31,48 +34,46 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         <div className="space-y-4 text-xs leading-relaxed text-slate-300">
-          <p>
-            <strong className="text-white">BeamDrop</strong> is an open-source, peer-to-peer file and text sharing tool designed for seamless transfer across devices on your local network.
-          </p>
+          <p>{t.aboutIntro}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <div className="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60">
               <div className="flex items-center gap-2 text-cyan-400 font-medium mb-1.5">
                 <Network className="h-4 w-4" />
-                <span>Zero Server Storage</span>
+                <span>{t.featureZeroStorageTitle}</span>
               </div>
-              <p className="text-slate-400 text-[11px]">
-                Files are streamed directly between devices over WebRTC data channels. The signaling server never reads, buffers, or stores your files.
+              <p className="text-slate-400 text-[11px] leading-relaxed">
+                {t.featureZeroStorageDesc}
               </p>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60">
               <div className="flex items-center gap-2 text-emerald-400 font-medium mb-1.5">
                 <Lock className="h-4 w-4" />
-                <span>End-to-End Encrypted</span>
+                <span>{t.featureE2ETitle}</span>
               </div>
-              <p className="text-slate-400 text-[11px]">
-                WebRTC traffic is natively encrypted using DTLS (Datagram Transport Layer Security), keeping all local transfers private.
+              <p className="text-slate-400 text-[11px] leading-relaxed">
+                {t.featureE2EDesc}
               </p>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60">
               <div className="flex items-center gap-2 text-violet-400 font-medium mb-1.5">
                 <Zap className="h-4 w-4" />
-                <span>64KB Chunk Streaming</span>
+                <span>{t.featureChunkingTitle}</span>
               </div>
-              <p className="text-slate-400 text-[11px]">
-                Files are sliced into 64KB chunks with backpressure control (<code className="text-slate-300">bufferedAmountLowThreshold</code>) to maintain stable data channel throughput.
+              <p className="text-slate-400 text-[11px] leading-relaxed">
+                {t.featureChunkingDesc}
               </p>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60">
               <div className="flex items-center gap-2 text-sky-400 font-medium mb-1.5">
                 <ShieldCheck className="h-4 w-4" />
-                <span>Automatic Discovery</span>
+                <span>{t.featureDiscoveryTitle}</span>
               </div>
-              <p className="text-slate-400 text-[11px]">
-                Devices sharing the same public or local subnet IP are grouped into the same session without needing accounts, sign-ins, or pairing codes.
+              <p className="text-slate-400 text-[11px] leading-relaxed">
+                {t.featureDiscoveryDesc}
               </p>
             </div>
           </div>
@@ -83,7 +84,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
             onClick={onClose}
             className="py-2 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors"
           >
-            Got it
+            {t.gotIt}
           </button>
         </div>
       </div>
